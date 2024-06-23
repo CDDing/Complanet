@@ -17,7 +17,7 @@ public class Planet : MonoBehaviour
     {
         Planet otherplanet = other.gameObject.GetComponent<Planet>();
         // Check if the other object is a planet and has the same index
-        if (otherplanet != null && otherplanet.index == index)
+        if (otherplanet != null && otherplanet.index == index && index !=7)
         {
             // Ensure this block is executed only once for the colliding pair
             if (!otherplanet.CollisionCheck && !CollisionCheck)
@@ -39,6 +39,10 @@ public class Planet : MonoBehaviour
 
                 // Create a new planet with the next index
                 GameObject newPlanet = Shooter.GetObject(idx + 1);
+                
+                newPlanet.AddComponent<Rigidbody>();
+                newPlanet.GetComponent<Rigidbody>().useGravity=false;
+                newPlanet.GetComponent<Rigidbody>().velocity=Vector3.zero;
                 User.Renew_maxidx(idx+1);
                 User.AddScore(idx + 1);
                 User.AddItemGauge(idx*2 + 2);

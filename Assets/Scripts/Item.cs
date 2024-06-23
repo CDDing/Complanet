@@ -14,5 +14,10 @@ public class Item : MonoBehaviour
     void Update()
     {
         gauge.fillAmount=(float)User.GetItemGauge() /(float) User.maxItemCut;
+        if(gauge.fillAmount==1f){
+            gauge.color=Color.red;
+        }else{
+            gauge.color=Color.white;
+        }
     }
 }

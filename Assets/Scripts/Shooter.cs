@@ -10,7 +10,11 @@ public class Shooter : MonoBehaviour
     public int PlanetCnt=8;
     public GameObject[] Planets;
     public string[] Order = {"Mercury", "Mars", "Venus","Earth","Neptune","Uranus","Saturn","Jupiter"};
-    public static float[] Scale = {1.0f, 1.39f,2.48f,2.61f,10.09f,10.39f,23.87f,28.66f };
+    public static float[] Scale = {1.0f, 1.39f,2.48f,3.61f,4.09f,5.39f,6.87f,7.66f };
+    // public static float[] Scale = {1.0f, 1.39f,2.48f,2.61f,10.09f,10.39f,23.87f,28.66f };
+    public static int[] logIndex = {1,2,4,8,16,32,64,128};
+    
+    public GameObject Item;
     // Start is called before the first frame update
     void Awake()
     {
@@ -20,6 +24,8 @@ public class Shooter : MonoBehaviour
             GameObject Prefab = Resources.Load<GameObject>("Planets/"+Order[i]);
             Planets[i]=Prefab;
         }
+        Item = Resources.Load<GameObject>("Planets/BlackHole");
+
     }
 
     // Update is called once per frame
@@ -29,9 +35,13 @@ public class Shooter : MonoBehaviour
         obj.transform.localScale = new Vector3(Scale[index],Scale[index],Scale[index]);
         obj.AddComponent<Planet>();
         obj.GetComponent<Planet>().index=index;
+        return obj;
+    }
+    public static GameObject GetItem(){
+        GameObject obj = Instantiate(ShooterInstance.Item);
+        obj.AddComponent<BlackHole>();
         obj.AddComponent<Rigidbody>();
         obj.GetComponent<Rigidbody>().useGravity=false;
-        obj.GetComponent<Rigidbody>().velocity=Vector3.zero;
         return obj;
     }
 }
