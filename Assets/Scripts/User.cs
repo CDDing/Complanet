@@ -1,9 +1,10 @@
 using System.Collections;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
-
 public class User : MonoBehaviour
 {
-    public ObjectPool pool;
+    public static User UserInstance;
     public GameObject Camera;
     public Vector3 Target;
     public float distance;
@@ -14,19 +15,31 @@ public class User : MonoBehaviour
 
     GameObject Launcher;
     GameObject Showable;
+    bool shootlock=false;
+
+    public static int score = 0;
+    public static int maxidx=0; 
+    public static bool GameOver = false;
     // Start is called before the first frame update
     void Start()
     {
-        pool=GameObject.Find("ObjectPool").GetComponent<ObjectPool>();
+        UserInstance=this;
         Target = new Vector3(0,0,0);
         distance = 10;
         transform.position = new Vector3(distance,0,0);
         Camera = transform.GetChild(0).gameObject;
         x=0;y=0;z=0;
-        Showable=pool.GetObject(0);
-        Destroy(Showable.GetComponent<Rigidbody>());
+        Showable=Shooter.GetObject(0);
+        //Destroy(Showable.GetComponent<Rigidbody>());
     }
-
+    public static void Renew_maxidx(int idx){
+        if(maxidx<idx){
+            maxidx=idx;
+        }
+    }
+    public static void AddScore(int scr){
+        score+=scr*(scr + 1)/2;
+    }
     void CameraMove(){
         float LeftRightInput = Input.GetAxis("Horizontal");
         float UpDownInput = Input.GetAxis("Vertical");
@@ -52,17 +65,23 @@ public class User : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CameraRotate();
-        CameraMove();
-        Showable.transform.position = distance*new Vector3(x,y,z);
-        if(Input.GetKeyDown(KeyCode.Space)){
-            ShootPlanet();
+        if(!GameOver){
+            CameraRotate();
+            CameraMove();
+            //Showable.transform.position = distance*new Vector3(x,y,z);
+            if(Input.GetKeyDown(KeyCode.Space)){
+                if(!shootlock)
+                    ShootPlanet();
+            
+            }
         }
     }
-    void ShootPlanet(){
-        Launcher = pool.GetObject(0);
+    async void ShootPlanet(){
+        shootlock=true;
+        Launcher = Shooter.GetObject((int)Random.Range(0,maxidx/2));
         Launcher.transform.position=distance*new Vector3(x,y,z);
         Launcher.GetComponent<Rigidbody>().AddForce(60*new Vector3(-x,-y,-z));
-
+        await Task.Delay(1500);
+        shootlock=false;
     }
 }
