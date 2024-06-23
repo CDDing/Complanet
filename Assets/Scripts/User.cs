@@ -20,6 +20,8 @@ public class User : MonoBehaviour
     public static int score = 0;
     public static int maxidx=0; 
     public static bool GameOver = false;
+    public static int itemgauge = 0;
+    public static int maxItemCut=50;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +41,16 @@ public class User : MonoBehaviour
     }
     public static void AddScore(int scr){
         score+=scr*(scr + 1)/2;
+    }
+    public static int GetItemGauge(){
+        return itemgauge;
+    }
+    public static void AddItemGauge(int cnt){
+        if(itemgauge + cnt >= maxItemCut){
+            itemgauge = maxItemCut;
+        }else{
+            itemgauge += cnt;
+        }
     }
     void CameraMove(){
         float LeftRightInput = Input.GetAxis("Horizontal");

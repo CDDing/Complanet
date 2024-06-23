@@ -41,6 +41,7 @@ public class Planet : MonoBehaviour
                 GameObject newPlanet = Shooter.GetObject(idx + 1);
                 User.Renew_maxidx(idx+1);
                 User.AddScore(idx + 1);
+                User.AddItemGauge(idx*2 + 2);
                 newPlanet.transform.position = position;
 
                 // Reset the CollisionCheck flag for both planets (optional if planets are being deactivated)
@@ -50,7 +51,7 @@ public class Planet : MonoBehaviour
         }
     }
     public void OnCollisionExit(Collision other){
-        User.GameOver=true;
+        //User.GameOver=true;
     }
 
     async Task AsyncFunc()
