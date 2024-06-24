@@ -83,7 +83,7 @@ public class User : MonoBehaviour
             CameraRotate();
             CameraMove();
             
-            if(!shootlock){
+            if(!shootlock&&Launcher!=null){
                 Launcher.transform.position=distance*new Vector3(x,y,z);
             }
             if(Input.GetKeyDown(KeyCode.Space)){
@@ -106,13 +106,15 @@ public class User : MonoBehaviour
     async void ShootPlanet(){
         shootlock=true;
         
-        Launcher.AddComponent<Rigidbody>();
-        Launcher.GetComponent<Rigidbody>().useGravity=false;
-        Launcher.GetComponent<Rigidbody>().velocity=Vector3.zero;
-        Launcher.GetComponent<Rigidbody>().AddForce(80*new Vector3(-x,-y,-z));
-        await Task.Delay(1500);
-        shootlock=false;
+        if(Launcher!=null){
+            Launcher.AddComponent<Rigidbody>();
+            Launcher.GetComponent<Rigidbody>().useGravity=false;
+            Launcher.GetComponent<Rigidbody>().velocity=Vector3.zero;
+            Launcher.GetComponent<Rigidbody>().AddForce(80*new Vector3(-x,-y,-z));
+            await Task.Delay(1500);
+        }
         Launcher = Shooter.GetObject((int)Random.Range(0,maxidx/2));
+        shootlock=false;
     }
     async public void ShootItem(){
         Ray ray = Camera.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
